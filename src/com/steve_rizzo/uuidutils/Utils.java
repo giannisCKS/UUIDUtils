@@ -37,9 +37,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 
 import java.util.Scanner;
@@ -71,9 +69,26 @@ public class Utils {
                         JsonObject uuidData = gson.fromJson(webData, JsonObject.class);
 
                         String uuid = uuidData.get("id").getAsString();
+                        String name = uuidData.get("name").getAsString();
 
-                        System.out.println("RAW: " + webData);
-                        System.out.println("ID: " + uuid);
+                        if ((webData != null) && (uuid != null)) {
+
+                            linebreaker();
+                            System.out.println("Name: " + name);
+                            System.out.println("UUID: " + uuid);
+                            linebreaker();
+
+                            Thread.sleep(10000);
+
+                        } else {
+
+                            linebreaker();
+                            System.out.println("ERROR: Data could not be found. Please re-run the application.");
+                            linebreaker();
+
+                            Thread.sleep(10000);
+
+                        }
 
                     } catch (Exception e) {
 
@@ -104,9 +119,24 @@ public class Utils {
 
                         // TODO -- Fix previous name printing.
 
-                        System.out.println("Previous names of ["+input+"] - ("+uuid+") " + "Are: \n" +
-                                pastNames);
+                        if ((input != null) && (uuid != null) && (pastNames != null)) {
 
+                            linebreaker();
+                            System.out.println("Previous names of [" + input + "] - (" + uuid + ") " + "Are: \n" +
+                                    pastNames);
+                            linebreaker();
+
+                            Thread.sleep(10000);
+
+                        } else {
+
+                            linebreaker();
+                            System.out.println("ERROR: Data could not be found. Please re-run the application.");
+                            linebreaker();
+
+                            Thread.sleep(10000);
+
+                        }
 
                     } catch (Exception e) {
 
@@ -120,21 +150,24 @@ public class Utils {
 
         } else {
 
-            System.out.println("You had to enter 'CURRENT' or 'PAST' to view details. Please re-run the application!");
-
             try {
 
-                Runtime rt = Runtime.getRuntime();
-                Process pr = rt.exec("java -jar test.jar");
+                System.out.println("You had to enter 'CURRENT' or 'PAST' to view details. Please re-run the application!");
+                Thread.sleep(10000);
 
-            } catch (IOException e) {
+            } catch (Exception exc) {
 
-                e.printStackTrace();
+                exc.printStackTrace();
 
             }
         }
     }
 
+    public static void linebreaker() {
+
+        System.out.println("===== [MC INFO] =====");
+
+    }
 
     private static String readUrl(String urlString) throws Exception {
 
