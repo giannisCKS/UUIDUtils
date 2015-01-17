@@ -134,7 +134,10 @@ public class Utils {
 
                                 // Split nameObj to separate strings, then print them, below.
 
-                                System.out.println(name + "\n");
+                                System.out.println(nameObj + "\n");
+
+                                // After splitting, the System should print:
+                                // System.out.println(name + "\n");
 
                             }
                             linebreaker();
