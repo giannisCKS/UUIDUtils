@@ -118,7 +118,7 @@ public class Utils {
                         String namesData = readUrl("https://api.mojang.com/user/profiles/"+uuid+"/names");
 
                         JsonArray pastNames = gson.fromJson(namesData, JsonArray.class);
-                        
+
                         if ((input != null) && (uuid != null) && (pastNames != null)) {
 
                             linebreaker();
