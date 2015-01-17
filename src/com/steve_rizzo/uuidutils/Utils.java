@@ -35,11 +35,13 @@ package com.steve_rizzo.uuidutils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.io.*;
 import java.net.URL;
 
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class Utils {
@@ -122,8 +124,19 @@ public class Utils {
                         if ((input != null) && (uuid != null) && (pastNames != null)) {
 
                             linebreaker();
-                            System.out.println("Previous names of [" + input + "] - (" + uuid + ") " + "Are: \n" +
-                                    pastNames);
+                            System.out.println("Previous names of [" + input + "] - (" + uuid + ") " + "Are: \n");
+
+                            Iterator<JsonElement> iterator = pastNames.iterator();
+                            while (iterator.hasNext()) {
+
+                                JsonElement element = gson.fromJson (iterator.next(), JsonElement.class);
+                                JsonObject nameObj = element.getAsJsonObject();
+
+                                // Split nameObj to separate strings, then print them, below.
+
+                                System.out.println(name + "\n");
+
+                            }
                             linebreaker();
 
                             Thread.sleep(10000);
