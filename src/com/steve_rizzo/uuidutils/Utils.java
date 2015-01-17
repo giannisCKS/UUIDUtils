@@ -118,9 +118,7 @@ public class Utils {
                         String namesData = readUrl("https://api.mojang.com/user/profiles/"+uuid+"/names");
 
                         JsonArray pastNames = gson.fromJson(namesData, JsonArray.class);
-
-                        // TODO -- Fix previous name printing.
-
+                        
                         if ((input != null) && (uuid != null) && (pastNames != null)) {
 
                             linebreaker();
@@ -129,15 +127,11 @@ public class Utils {
                             Iterator<JsonElement> iterator = pastNames.iterator();
                             while (iterator.hasNext()) {
 
-                                JsonElement element = gson.fromJson (iterator.next(), JsonElement.class);
+                                JsonElement element = gson.fromJson(iterator.next(), JsonElement.class);
                                 JsonObject nameObj = element.getAsJsonObject();
+                                String name = nameObj.get("name").getAsString();
 
-                                // Split nameObj to separate strings, then print them, below.
-
-                                System.out.println(nameObj + "\n");
-
-                                // After splitting, the System should print:
-                                // System.out.println(name + "\n");
+                                System.out.println(name + "\n");
 
                             }
                             linebreaker();
