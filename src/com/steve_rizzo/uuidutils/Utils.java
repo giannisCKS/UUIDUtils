@@ -141,7 +141,7 @@ public class Utils {
                         } else {
 
                             linebreaker();
-                            System.out.println("ERROR: Data could not be found. Please re-run the application.");
+                            sendErrorMessage("Data could not be found. Please re-run the application.");
                             linebreaker();
 
                             Thread.sleep(10000);
@@ -162,7 +162,7 @@ public class Utils {
 
             try {
 
-                System.out.println("You had to enter 'CURRENT' or 'PAST' to view details. Please re-run the application!");
+                sendErrorMessage("You had to enter 'CURRENT' or 'PAST' to view details. Please re-run the application!");
                 Thread.sleep(10000);
 
             } catch (Exception exc) {
@@ -179,7 +179,7 @@ public class Utils {
 
     }
 
-    private static String readUrl(String urlString) throws Exception {
+    public static String readUrl(String urlString) throws Exception {
 
         BufferedReader reader = null;
 
@@ -195,5 +195,14 @@ public class Utils {
         } finally {
             if (reader != null) reader.close();
         }
+    }
+
+    public static void sendErrorMessage(String message) {
+
+        System.out.println("=============== [ERROR] ===============");
+        System.out.println("Oh no! An error occurred!");
+        System.out.println("Tips: " + message);
+        System.out.println("=============== [ERROR] ===============");
+
     }
 }
