@@ -113,13 +113,16 @@ public class Utils {
 
                         JsonObject uuidData = gson.fromJson(webData, JsonObject.class);
 
-                        String uuid = uuidData.get("id").getAsString();
+                        String uuid = "";
+                        if (uuidData != null) {
+                            uuid = uuidData.get("id").getAsString();
+                        }
 
-                        String namesData = readUrl("https://api.mojang.com/user/profiles/"+uuid+"/names");
+                        if (!uuid.equals("")) {
 
-                        JsonArray pastNames = gson.fromJson(namesData, JsonArray.class);
+                            String namesData = readUrl("https://api.mojang.com/user/profiles/" + uuid + "/names");
 
-                        if ((input != null) && (uuid != null) && (pastNames != null)) {
+                            JsonArray pastNames = gson.fromJson(namesData, JsonArray.class);
 
                             linebreaker();
                             System.out.println("Previous names of [" + input + "] - (" + uuid + ") " + "Are: \n");
@@ -140,9 +143,7 @@ public class Utils {
 
                         } else {
 
-                            linebreaker();
-                            sendErrorMessage("Data could not be found. Please re-run the application.");
-                            linebreaker();
+                            sendErrorMessage("This player could not be found." + "\nPlease re-run the application.");
 
                             Thread.sleep(10000);
 
