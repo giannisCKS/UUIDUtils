@@ -46,130 +46,186 @@ import java.util.Scanner;
 
 public class Utils {
 
+    private static boolean isRunning = true;
+
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
+        while (isRunning) {
 
-        System.out.println("Would you like to see [CURRENT] or [PAST] info?");
-        String input = scanner.nextLine();
+            Scanner scanner = new Scanner(System.in);
 
-        if (input.equalsIgnoreCase("current") || (input.equalsIgnoreCase("past"))) {
+            System.out.println("Would you like to see [CURRENT] or [PAST] info?");
+            String input = scanner.nextLine();
 
-            switch (input.toUpperCase()) {
+            if (input.equalsIgnoreCase("current") || (input.equalsIgnoreCase("past"))) {
 
-                case "CURRENT":
+                switch (input.toUpperCase()) {
 
-                    System.out.println("Enter a user's name: ");
-                    input = scanner.nextLine();
+                    case "CURRENT":
 
-                    try {
+                        System.out.println("Enter a user's name: ");
+                        input = scanner.nextLine();
 
-                        String webData = readUrl("https://api.mojang.com/users/profiles/minecraft/" + input);
+                        try {
 
-                        Gson gson = new Gson();
+                            String webData = readUrl("https://api.mojang.com/users/profiles/minecraft/" + input);
 
-                        JsonObject uuidData = gson.fromJson(webData, JsonObject.class);
+                            Gson gson = new Gson();
 
-                        String uuid = uuidData.get("id").getAsString();
-                        String name = uuidData.get("name").getAsString();
+                            JsonObject uuidData = gson.fromJson(webData, JsonObject.class);
 
-                        if ((webData != null) && (uuid != null)) {
+                            String uuid = uuidData.get("id").getAsString();
+                            String name = uuidData.get("name").getAsString();
 
-                            linebreaker();
-                            System.out.println("Name: " + name);
-                            System.out.println("UUID: " + uuid);
-                            linebreaker();
+                            if ((webData != null) && (uuid != null)) {
 
-                            Thread.sleep(10000);
+                                linebreaker();
+                                System.out.println("Name: " + name);
+                                System.out.println("UUID: " + uuid);
+                                linebreaker();
 
-                        } else {
+                                // Restart application.
+                                System.out.println("Restarting application ...");
+                                Thread.sleep(1500);
+                                clearCommands();
 
-                            linebreaker();
-                            System.out.println("ERROR: Data could not be found. Please re-run the application.");
-                            linebreaker();
+                            } else {
 
-                            Thread.sleep(10000);
+                                linebreaker();
+                                System.out.println("ERROR: Data could not be found.");
+                                linebreaker();
 
-                        }
-
-                    } catch (Exception e) {
-
-                        e.printStackTrace();
-
-                    }
-
-                    break;
-
-                case "PAST":
-
-                    System.out.println("Enter a user's name: ");
-                    input = scanner.nextLine();
-
-                    try {
-
-                        String webData = readUrl("https://api.mojang.com/users/profiles/minecraft/" + input);
-
-                        Gson gson = new Gson();
-
-                        JsonObject uuidData = gson.fromJson(webData, JsonObject.class);
-
-                        String uuid = "";
-                        if (uuidData != null) {
-                            uuid = uuidData.get("id").getAsString();
-                        }
-
-                        if (!uuid.equals("")) {
-
-                            String namesData = readUrl("https://api.mojang.com/user/profiles/" + uuid + "/names");
-
-                            JsonArray pastNames = gson.fromJson(namesData, JsonArray.class);
-
-                            linebreaker();
-                            System.out.println("Previous names of [" + input + "] - (" + uuid + ") " + "Are: \n");
-
-                            Iterator<JsonElement> iterator = pastNames.iterator();
-                            while (iterator.hasNext()) {
-
-                                JsonElement element = gson.fromJson(iterator.next(), JsonElement.class);
-                                JsonObject nameObj = element.getAsJsonObject();
-                                String name = nameObj.get("name").getAsString();
-
-                                System.out.println(name + "\n");
+                                // Restart application.
+                                System.out.println("Restarting application ...");
+                                Thread.sleep(1500);
+                                clearCommands();
 
                             }
-                            linebreaker();
 
-                            Thread.sleep(10000);
+                        } catch (Exception e) {
 
-                        } else {
+                            e.printStackTrace();
 
-                            sendErrorMessage("This player could not be found." + "\nPlease re-run the application.");
+                            // Restart application.
+                            System.out.println("Restarting application ...");
 
-                            Thread.sleep(10000);
+                            try {
+                                Thread.sleep(1500);
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
+
+                            clearCommands();
 
                         }
 
-                    } catch (Exception e) {
+                        break;
 
-                        e.printStackTrace();
+                    case "PAST":
 
+                        System.out.println("Enter a user's name: ");
+                        input = scanner.nextLine();
+
+                        try {
+
+                            String webData = readUrl("https://api.mojang.com/users/profiles/minecraft/" + input);
+
+                            Gson gson = new Gson();
+
+                            JsonObject uuidData = gson.fromJson(webData, JsonObject.class);
+
+                            String uuid = "";
+                            if (uuidData != null) {
+                                uuid = uuidData.get("id").getAsString();
+                            }
+
+                            if (!uuid.equals("")) {
+
+                                String namesData = readUrl("https://api.mojang.com/user/profiles/" + uuid + "/names");
+
+                                JsonArray pastNames = gson.fromJson(namesData, JsonArray.class);
+
+                                linebreaker();
+                                System.out.println("Previous names of [" + input + "] - (" + uuid + ") " + "Are: \n");
+
+                                int i = 0;
+                                Iterator<JsonElement> iterator = pastNames.iterator();
+                                while (iterator.hasNext()) {
+
+                                    i++;
+                                    JsonElement element = gson.fromJson(iterator.next(), JsonElement.class);
+                                    JsonObject nameObj = element.getAsJsonObject();
+                                    String name = nameObj.get("name").getAsString();
+
+                                    System.out.println(i+". " + name + "\n");
+
+                                }
+                                linebreaker();
+
+                                // Restart application.
+                                System.out.println("Restarting application ...");
+                                Thread.sleep(1500);
+                                clearCommands();
+
+                            } else {
+
+                                sendErrorMessage("This player could not be found.");
+
+                                // Restart application.
+                                System.out.println("Restarting application ...");
+                                Thread.sleep(1500);
+                                clearCommands();
+
+                            }
+
+                        } catch (Exception e) {
+
+                            e.printStackTrace();
+
+                            // Restart application.
+                            System.out.println("Restarting application ...");
+
+                            try {
+                                Thread.sleep(1500);
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
+
+                            clearCommands();
+
+                        }
+
+                        break;
+
+                }
+
+            } else {
+
+                try {
+
+                    sendErrorMessage("You had to enter 'CURRENT' or 'PAST' to view details.");
+
+                    // Restart application.
+                    System.out.println("Restarting application ...");
+                    Thread.sleep(1500);
+                    clearCommands();
+
+                } catch (Exception exc) {
+
+                    exc.printStackTrace();
+
+                    // Restart application.
+                    System.out.println("Restarting application ...");
+
+                    try {
+                        Thread.sleep(1500);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
                     }
 
-                    break;
+                    clearCommands();
 
-            }
-
-        } else {
-
-            try {
-
-                sendErrorMessage("You had to enter 'CURRENT' or 'PAST' to view details. Please re-run the application!");
-                Thread.sleep(10000);
-
-            } catch (Exception exc) {
-
-                exc.printStackTrace();
-
+                }
             }
         }
     }
@@ -206,4 +262,13 @@ public class Utils {
         System.out.println("=============== [ERROR] ===============");
 
     }
+
+    private static void clearCommands() {
+
+        for (int i = 0 ; i < 20 ; i++) {
+            System.out.println("                                       ");
+        }
+
+    }
+
 }

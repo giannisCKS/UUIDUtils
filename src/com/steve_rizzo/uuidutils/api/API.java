@@ -32,7 +32,6 @@ public class API {
         } catch (Exception e) {
 
             utils.sendErrorMessage("Please re-run the program and \n make sure the proper name is used!");
-
         }
 
         return uuid;
