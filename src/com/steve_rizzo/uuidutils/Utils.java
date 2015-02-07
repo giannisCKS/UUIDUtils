@@ -46,9 +46,9 @@ import java.util.Scanner;
 
 public class Utils {
 
-    private static boolean isRunning = true;
-
     public static void main(String[] args) {
+
+        boolean isRunning = true;
 
         while (isRunning) {
 
